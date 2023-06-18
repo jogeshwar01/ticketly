@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-mongo-depl
+spec:
+  replicas: 1
+  selector:
+  #  this label is used to identify pod by the deployment
+    matchLabels:
+      app: auth-mongo
+  template:
+    metadata:
+      #  this gets applied to the pod
+      labels:
+        app: auth-mongo
+    spec:
+      containers:
+        - name: auth-mongo
+          image: mongo
+          # this is the officially hosted image on dockerhub
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-mongo-srv
+spec:
+  selector:
+    # find pod with label app:auth_mongo
+    app: auth-mongo
+  ports:
+    - name: db  # this name is only for logging purposes
+      protocol: TCP
+      port: 27017
+      targetPort: 27017
