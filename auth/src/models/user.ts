@@ -24,16 +24,27 @@ interface UserDoc extends mongoose.Document {
 }
 
 const userSchema = new mongoose.Schema({
-  email: {
-    // this 'String' type is from typescript
-    type: String,
-    required: true
+    email: {
+      // this 'String' type is from typescript
+      type: String,
+      required: true
+    },
+    password: {
+      type: String,
+      required: true
+    }
   },
-  password: {
-    type: String,
-    required: true
+  {
+    toJSON: {
+      transform(doc, ret) {
+        ret.id = ret._id;
+        delete ret._id;
+        delete ret.password;
+        delete ret.__v;
+      },
+    },
   }
-});
+);
 
 // this done is used to be able to use async await in mongoose - we call it at end - this is just how it works
 // don't use arrow function as then our 'this' would be overridden and would be in context of this file as opposed to UserDoc

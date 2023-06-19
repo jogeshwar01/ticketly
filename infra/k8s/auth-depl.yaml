@@ -15,6 +15,14 @@ spec:
       containers:
         - name: auth
           image: jogeshwarsingh/auth
+          env:
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  # verify that this is correctly named - 
+                  # if error - do kubectl get pods and describe the one thats new
+                  key: JWT_KEY
 ---
 apiVersion: v1
 kind: Service
