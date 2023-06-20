@@ -1,9 +1,9 @@
 import express, { Request, Response } from "express";
-import { body, validationResult } from "express-validator";
+import { body } from "express-validator";
 import jwt from 'jsonwebtoken';
 
+import { validateRequest } from "../middlewares/validate-request";
 import { User } from '../models/user';
-import { RequestValidationError } from "../errors/request-validation-error";
 import { BadRequestError } from '../errors/bad-request-error';
 
 const router = express.Router();
@@ -17,13 +17,8 @@ router.post(
       .isLength({ min: 4, max: 20 })
       .withMessage("Password must be between 4 and 20 characters"),
   ],
+  validateRequest,  // middleware - this is added after validation as it depends on it
   async (req: Request, res: Response) => {
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-      throw new RequestValidationError(errors.array());
-    }
-
     const { email, password } = req.body;
 
     const existingUser = await User.findOne({ email });
@@ -42,7 +37,7 @@ router.post(
         email: user.email
       },
       process.env.JWT_KEY!  // ! -> bypass check thats needed just before this - as we did it in index.js
-                            // can add a check before to check if this exists at application startup
+      // can add a check before to check if this exists at application startup
     );
 
     // Store it on session object - this is possible due to cookie-session package - it adds it to cookies

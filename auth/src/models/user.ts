@@ -35,6 +35,7 @@ const userSchema = new mongoose.Schema({
     }
   },
   {
+    // done to get a consistent output from mongo - as diff services may be in diff languages
     toJSON: {
       transform(doc, ret) {
         ret.id = ret._id;
