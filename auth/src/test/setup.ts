@@ -6,7 +6,10 @@ let mongo: any;
 
 //this will run before all our tests start to run
 beforeAll(async () => {
-  const mongo = await MongoMemoryServer.create();
+  process.env.JWT_KEY = 'asdfasdf'; 
+  // we need to write this as our env variables should exists for tests as well
+
+  mongo = await MongoMemoryServer.create();
   const mongoUri = mongo.getUri();
 
   await mongoose.connect(mongoUri, {});

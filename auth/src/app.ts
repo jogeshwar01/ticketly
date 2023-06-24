@@ -19,7 +19,9 @@ app.use(
   cookieSession({
     signed: false,  //to disable encryption - jwt is already encrypted - 
     //very imp to do this if different services are in different languages
-    secure: true,   //cookies only used if https connection - imp ****** 
+    secure: process.env.NODE_ENV !== 'test'   //cookies only used if https connection if secure:true -> imp ****** 
+    // when we use supertest  library for test - it only uses http - so we need to do this to make it work
+    // whenver jest runs, the NODE_ENV variable is set to 'test'
   })
 );
 
