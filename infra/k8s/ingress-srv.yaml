@@ -24,3 +24,5 @@ spec:
                 name: client-srv
                 port:
                   number: 3000
+
+# by default, to access on local machine - localhost at port 80
