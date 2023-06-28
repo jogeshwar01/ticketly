@@ -2,3 +2,4 @@ node_modules
 skaffold
 secrets.txt
 .next
+build
