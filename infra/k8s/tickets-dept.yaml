@@ -1,42 +1,39 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-depl
+  name: tickets-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: auth
+      app: tickets
   template:
     metadata:
       labels:
-        app: auth
+        app: tickets
     spec:
       containers:
-        - name: auth
-          image: jogeshwarsingh/auth
+        - name: tickets
+          image: jogeshwarsingh/tickets
           env:
             - name: MONGO_URI
-              value: 'mongodb://auth-mongo-srv:27017/auth'
+              value: 'mongodb://tickets-mongo-srv:27017/tickets'
+              # can also create a secret for this if we dont want it to be visible - not needed here
             - name: JWT_KEY
               valueFrom:
                 secretKeyRef:
                   name: jwt-secret
-                  # verify that this is correctly named - 
-                  # if error - do kubectl get pods and describe the one thats new
                   key: JWT_KEY
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth-srv
+  name: tickets-srv
 spec:
   selector:
-    app: auth
+    app: tickets
   ports:
-    - name: auth
+    - name: tickets
       protocol: TCP
       port: 3000
       targetPort: 3000
-
-# As no type defined - by default it is clusterIP

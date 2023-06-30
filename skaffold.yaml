@@ -24,3 +24,17 @@ build:
         manual:
           - src: '**/*.js'
             dest: .
+    - image: jogeshwarsingh/tickets
+      context: tickets
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+
+# Skaffold can also be used to set up actual Kubernetes clusters in cloud providers, so you do need to push them to DockerHub if you were using GCP
+# Because the local dev cluster leverages your local installation of Docker, your container image is available for it to use.
+# and if we need to push to dockerhub, we would need to create image with our docker username
+# For local, it works fine directly
+# COMMANDS -> 1)docker build -t <image-name> .     2)docker push <image_name>
