@@ -23,7 +23,8 @@ interface UserDoc extends mongoose.Document {
   password: string;
 }
 
-const userSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema(
+  {
     email: {
       // this 'String' type is from typescript
       type: String,
@@ -36,6 +37,7 @@ const userSchema = new mongoose.Schema({
   },
   {
     // done to get a consistent output from mongo - as diff services may be in diff languages
+    // ret is the object thats just about to be turned into json
     toJSON: {
       transform(doc, ret) {
         ret.id = ret._id;
