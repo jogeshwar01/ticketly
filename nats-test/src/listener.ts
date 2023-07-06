@@ -16,13 +16,17 @@ stan.on('connect', () => {
     process.exit();
   });
 
-  const options = stan.subscriptionOptions().setManualAckMode(true);
-  // only when manually acknowledged do we consider an event processed
+  const options = stan
+  .subscriptionOptions()
+  .setManualAckMode(true)                 // only when manually acknowledged do we consider an event processed
+  .setDeliverAllAvailable()               // get all events emitted ever - useful when new service created
+  .setDurableName('accounting-service');  // durable subscription - to get only the un-processed events 
+                                          // as it contains details of all events and whether they are processed or not
   
   // subscribing to channel ticket:created
   const subscription = stan.subscribe(
     'ticket:created',
-    'orders-service-queue-group',
+    'queue-group-name', // helps when we even temporarily disconnect services in a group, the durable sub won't be dumped by nats
     options
   );
 
