@@ -1,9 +1,15 @@
 import { Message, Stan } from 'node-nats-streaming';
+import { Subjects } from './subjects';
 
-export abstract class Listener {
-  abstract subject: string; //name of channel this listener would listen to
+interface Event {
+  subject: Subjects;
+  data: any;
+}
+
+export abstract class Listener<T extends Event> {
+  abstract subject: T['subject']; //name of channel this listener would listen to
   abstract queueGroupName: string; //the one the listener will join
-  abstract onMessage(data: any, msg: Message): void; //fn to run when msg received
+  abstract onMessage(data: T['data'], msg: Message): void; //fn to run when msg received
   private client: Stan; //pre initialised stan client
   protected ackWait = 5 * 1000; //no. of seconds this listener has to ack a msg
 
