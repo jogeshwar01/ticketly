@@ -10,6 +10,9 @@ declare global {
 // doing global just for ease of use - can create a auth Helper separately and import wherever needed also
 // this wont be available in our normal app code so only for testing environment
 
+jest.mock("../nats-wrapper");
+// this is going to create a mock of the nats-wrapper class and it would look into the __mocks__ folder for the fake one
+
 let mongo: any;
 
 //this will run before all our tests start to run
@@ -27,6 +30,7 @@ beforeAll(async () => {
 
 //this will run before each of our test - reset data in mongo
 beforeEach(async () => {
+  jest.clearAllMocks();
   const collections = await mongoose.connection.db.collections();
 
   for (let collection of collections) {
