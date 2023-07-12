@@ -16,6 +16,15 @@ spec:
         - name: tickets
           image: jogeshwarsingh/tickets
           env:
+            # client id is different for each client - so we use name of our pod
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NATS_URL
+              value: 'http://nats-srv:4222'
+            - name: NATS_CLUSTER_ID
+              value: ticketly
             - name: MONGO_URI
               value: 'mongodb://tickets-mongo-srv:27017/tickets'
               # can also create a secret for this if we dont want it to be visible - not needed here
