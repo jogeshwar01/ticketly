@@ -3,6 +3,7 @@ import request from 'supertest';
 import { app } from '../../app';
 import { Order, OrderStatus } from '../../models/order';
 import { Ticket } from '../../models/ticket';
+import { natsWrapper } from '../../nats-wrapper';
 
 //can add the auth tests here as we did in tickets - not doing here as already done once
 //will need for proper application
@@ -52,5 +53,18 @@ it('reserves a ticket', async () => {
     .expect(201);
 });
 
-//write later when events stuff done
-it.todo('emits an order created event');
+it('emits an order created event', async () => {
+  const ticket = Ticket.build({
+    title: 'concert',
+    price: 20,
+  });
+  await ticket.save();
+
+  await request(app)
+    .post('/api/orders')
+    .set('Cookie', global.signin())
+    .send({ ticketId: ticket.id })
+    .expect(201);
+
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
+});

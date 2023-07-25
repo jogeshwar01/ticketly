@@ -1,14 +1,17 @@
 import mongoose from 'mongoose';
 import express, { Request, Response } from 'express';
-import { 
+import {
   requireAuth,
   validateRequest,
   NotFoundError,
   OrderStatus,
-  BadRequestError, } from '@js-ticketly/common';
+  BadRequestError,
+} from '@js-ticketly/common';
 import { body } from 'express-validator';
 import { Ticket } from '../models/ticket';
 import { Order } from '../models/order';
+import { OrderCreatedPublisher } from '../events/publishers/order-created-publisher';
+import { natsWrapper } from '../nats-wrapper';
 
 const router = express.Router();
 
@@ -56,6 +59,17 @@ router.post(
     await order.save();
 
     // Publish an event saying that an order was created
+    new OrderCreatedPublisher(natsWrapper.client).publish({
+      id: order.id,
+      status: order.status,
+      userId: order.userId,
+      expiresAt: order.expiresAt.toISOString(),
+      // why toString - if we put date here, then that will cause issues with timezones while converting to json later
+      ticket: {
+        id: ticket.id,
+        price: ticket.price,
+      },
+    });
 
     res.status(201).send(order);
   }
