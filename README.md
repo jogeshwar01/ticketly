@@ -9,6 +9,7 @@
 * **The Client** is written with: React.js and Next.js as _Server Side Redered App_
 * MongoDB as my database (Documents)
 * Tests with jest, supertest and mongodb-memory-server
+* BullJS, Redis
 
 ### To handle publish failures
 - Create an extra events table having all the events published
