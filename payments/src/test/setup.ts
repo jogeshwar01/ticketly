@@ -5,7 +5,7 @@ import { app } from '../app';
 import jwt from 'jsonwebtoken';
 
 declare global {
-  var signin: () => string[];
+  var signin: (id?: string) => string[];
 }
 // doing global just for ease of use - can create a auth Helper separately and import wherever needed also
 // this wont be available in our normal app code so only for testing environment
@@ -46,10 +46,10 @@ afterAll(async () => {
 });
 
 // to get cookie - fake signin for tests by creating dummy user and generating jwt
-global.signin = () => {
+global.signin = (id?: string) => {
   // Build a JWT payload. { id, email}
   const payload = {
-    id: new mongoose.Types.ObjectId().toHexString(),  //random id everytime
+    id: id || new mongoose.Types.ObjectId().toHexString(),
     email: "test@test.com",
   };
 
