@@ -13,6 +13,9 @@ declare global {
 jest.mock("../nats-wrapper");
 // this is going to create a mock of the nats-wrapper class and it would look into the __mocks__ folder for the fake one
 
+process.env.STRIPE_KEY = 'sk_test_51JzfKQSAJ3mr6KzPPBl9quReK2t6OC7ARXFca5lMVWOmexGVkTssuT5VJwQiRalYfFd5O3bxDN2dlwisoA5X7vHt00CKB550q3';
+// for production, use a .env
+
 let mongo: any;
 
 //this will run before all our tests start to run
