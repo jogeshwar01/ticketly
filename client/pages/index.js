@@ -12,7 +12,7 @@ LandingPage.getInitialProps = async (context, client, currentUser) => {
 
 export default LandingPage;
 
-// cannot use useRequest as it can only be used in a react component
+// cannot use useRequest in getInitialProps as it can only be used in a react component
 // getInitialProps is the static method called by next js after it determines which page to show
 // used when we want to fetch data from next js during server side rendering  - executed on server
 
