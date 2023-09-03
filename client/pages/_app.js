@@ -7,7 +7,7 @@ const AppComponent = ({ Component, pageProps, currentUser }) => {
   return (
     <div>
       <Header currentUser={currentUser} />
-      <Component {...pageProps} />
+      <Component currentUser={currentUser} {...pageProps} />
     </div>
   );
 };
@@ -18,7 +18,12 @@ AppComponent.getInitialProps = async appContext => {
 
   let pageProps = {};
   if (appContext.Component.getInitialProps) {
-    pageProps = await appContext.Component.getInitialProps(appContext.ctx);
+    pageProps = await appContext.Component.getInitialProps(
+      appContext.ctx,
+      client,
+      data.currentUser
+      //client and user - to not repeat it in each component's code
+    );
   }
 
   return {
@@ -32,7 +37,7 @@ export default AppComponent;
 // this is the way to include global css in next js
 // the file name must be _app.js
 
-// the arguments provided by getInitialProps are different for a page and a Custom app component
+// the arguments provided by getInitialProps are different for a page (normal file) and a Custom app component (file starting with _)
 // for a normal page -> context == {req,res}
 // for custom app    -> context == {Component, ctx: {req,res}}
 // but if our app has a getInitialProps then our page's getInitialProps wont be called automatically
