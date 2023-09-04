@@ -19,6 +19,8 @@ beforeAll(async () => {
 
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
+  // if here we did const mongo = await MongoMemoryServer.create()
+  // then you find that your tests are hanging in the GitHub Actions environment
   mongo = await MongoMemoryServer.create();
   const mongoUri = mongo.getUri();
 
